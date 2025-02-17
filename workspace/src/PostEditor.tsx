@@ -40,6 +40,9 @@ export default function PostEditor() {
   //    v---------------v--- Destructuring Operator in JS  (Python/C++: unpacking)
   const [title, setTitle] = useState("Hello World"); // 1. "Hello World" setTitle
   const [body, setBody] = useState(""); // "A"  "Hello World"
+
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
   // Specify TypeArgument if typescript inference does not work for you:
   // const [degree, setDegress] = useState<number|null>(-7);
   // const [cities, setCities] = useState(["Hello World"]);
@@ -52,9 +55,10 @@ export default function PostEditor() {
   function handleClear() {
     setTitle("");
     setBody("");
+    setSelectedTags([]);
   }
 
-  const myAvailableTags = [...AVAILABLE_TAGS, title, body];
+  // const myAvailableTags = [...AVAILABLE_TAGS, title, body];
 
   //
   // JSX => JavaScript XML or XML in JavaScript
@@ -77,7 +81,12 @@ export default function PostEditor() {
         <textarea value={body} onChange={e => setBody(e.target.value)} />
       </label>
 
-      <TagChooser availableTags={myAvailableTags} title={"New Tag Chooser 2000 NG X"} />
+      <TagChooser
+        availableTags={AVAILABLE_TAGS}
+        title={"New Tag Chooser"}
+        selectedTags={selectedTags}
+        onTagsSelected={setSelectedTags}
+      />
 
       <button onClick={handleClear}>Clear</button>
     </div>

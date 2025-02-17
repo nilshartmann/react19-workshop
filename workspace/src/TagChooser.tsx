@@ -11,11 +11,17 @@ import { useState } from "react";
 type TagChooserProps = {
   title?: string;
   availableTags: string[];
+  selectedTags: string[];
+  onTagsSelected: (newTags: string[]) => void;
 };
 
-export default function TagChooser({ title = "Tag Chooser", availableTags }: TagChooserProps) {
+export default function TagChooser({
+  title = "Tag Chooser",
+  availableTags,
+  selectedTags,
+  onTagsSelected
+}: TagChooserProps) {
   // export default function TagChooser(props: TagChooserProps) {
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   // title.toUpperCase();
 
@@ -28,7 +34,7 @@ export default function TagChooser({ title = "Tag Chooser", availableTags }: Tag
       ? selectedTags.filter(t => t !== tag)
       : selectedTags.concat(tag);
 
-    setSelectedTags(newSelection);
+    onTagsSelected(newSelection);
   }
 
   // // === = = = equals  tripple equal operator
