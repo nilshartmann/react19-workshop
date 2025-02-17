@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import TagChooser from "./TagChooser.tsx";
 
 /*
 - todo:
@@ -14,7 +15,7 @@ export function postEditorLogger(log: string) {
 }
 
 const HELLO_WORLD = "JO!";
-
+const AVAILABLE_TAGS = ["JavaScript", "TypeScript", "React"];
 // const thisWillNotWork = useState("Hello World");
 
 //ECMAScript Module System (ESM)
@@ -53,6 +54,8 @@ export default function PostEditor() {
     setBody("");
   }
 
+  const myAvailableTags = [...AVAILABLE_TAGS, title, body];
+
   //
   // JSX => JavaScript XML or XML in JavaScript
   // Virtual DOM  renders to a target platform (mainly the browser)
@@ -73,6 +76,8 @@ export default function PostEditor() {
         Body
         <textarea value={body} onChange={e => setBody(e.target.value)} />
       </label>
+
+      <TagChooser availableTags={myAvailableTags} title={"New Tag Chooser 2000 NG X"} />
 
       <button onClick={handleClear}>Clear</button>
     </div>

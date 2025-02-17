@@ -1,7 +1,23 @@
 import { useState } from "react";
 
-export default function TagChooser() {
+// Properties
+// <TagChooser title="Choose your tags." availableTags={AVAILABLE_TAGS} />
+
+// props = {
+//  title: "Choose your tags.",
+//  availableTags: AVAILABLE_TAGS
+// }
+
+type TagChooserProps = {
+  title?: string;
+  availableTags: string[];
+};
+
+export default function TagChooser({ title = "Tag Chooser", availableTags }: TagChooserProps) {
+  // export default function TagChooser(props: TagChooserProps) {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  // title.toUpperCase();
 
   function handleSelectTag(tag: string) {
     // If the clicked tag is already in the list of selected tags,
@@ -15,30 +31,67 @@ export default function TagChooser() {
     setSelectedTags(newSelection);
   }
 
+  // // === = = = equals  tripple equal operator
+  // // == = = equals     double equal operator (with implicit type conversion)
+  // // =  assignment
+  //
+  // // #0
+  // let first_0;
+  // if (title === undefined) {
+  //   first_0 = "..."
+  // } else {
+  //   first_0 = title.substring(0, 3);
+  // }
+  // // #1
+  // const firstThreeCharsFromTitle_1 = title === undefined ? "..." : title.substring(0, 3);
+  // // #2
+  // const firstThreeCharsFromTitle_2 = title?.substring(0, 3);
+  // // #3
+  // const firstThreeCharsFromTitle_3 = title ?? "..."
+
+  // STATEMENT
+  const result = availableTags.map(a => a.toUpperCase());
+
+  // STATEMENT
+  function createList() {
+    // STATEMENT
+    for (let i = 0; i < availableTags.length; i++) {
+      //
+    }
+  }
+
+  // EXPRESSIONS
+  // ""
+  // a ? "..." : ""
+  // function invocation
+
+  // const styles = {
+  //   backgroundColor: "red",
+  //   padding: "5px"
+  // };
+
   return (
     <div>
-      <h2>TODO: title aus Properties einsetzen</h2>
+      <h2
+        style={{
+          padding: "5px"
+        }}
+      >
+        {title}
+      </h2>
       <div className={"TagChooser__tags"}>
-        {/*
-
-// TODO: Iterate over the "availableTags" list using the map function,
-//       which is passed as a property to the TagChooser component,
-//       and create a checkbox for each tag.
-//         availableTags.map(t => ...)
-//
-//       - At the top level, a <label> should be rendered
-//         - You need to set the key property (e.g., to the current tag)
-//         - The label element should have two children (<label><input ...>TAG_NAME</label>):
-//           - 1. An input field with the following properties:
-//               - 'type="checkbox"'
-//               - 'checked': must be true if the current tag (t) is present
-//                 in the list of selected tags ('selectedTags')
-//               - 'onChange': should call the function 'handleSelectTag'
-//                 with the current tag (t)
-//           - 2. The name of the current tag
-
-
-        */}
+        {availableTags.map(a => {
+          return (
+            <label key={a}>
+              {a}
+              <input
+                type={"checkbox"}
+                onChange={() => handleSelectTag(a)}
+                checked={selectedTags.includes(a)}
+              />
+            </label>
+          );
+        })}
       </div>
     </div>
   );
