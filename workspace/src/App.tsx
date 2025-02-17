@@ -5,6 +5,7 @@ export default function App() {
   return (
     <>
       <PostEditorPage />
+      {/*<PostEditorPage />*/}
       <PostListPage />
     </>
   );
