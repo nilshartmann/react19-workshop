@@ -98,7 +98,7 @@ Test Files  1 passed (1)
 
    ```bash
    cd ./workspace
-   npm start
+   npm run dev
    ```
 
 **Note!** The frontend runs on **Port 3000**, so this port must be available.
