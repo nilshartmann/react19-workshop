@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./create-query-client.ts";
 import PostPage from "./PostPage.tsx";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const router = createBrowserRouter([
   {
@@ -20,5 +21,6 @@ console.log("ROUTER", router);
 createRoot(document.getElementById("root")!).render(
   <QueryClientProvider client={queryClient}>
     <RouterProvider router={router} />
+    {/*<ReactQueryDevtools />*/}
   </QueryClientProvider>
 );

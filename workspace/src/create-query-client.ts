@@ -3,14 +3,14 @@ import { QueryClient } from "@tanstack/react-query";
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // ACHTUNG:
-      // Das sind Default-Einstellung die fuer ALLE Queries gelten.
-      //  (Die Einstellungen koennen in jedem Query ueberschrieben werden)
-      // Diese Einstellungen habe ich gewaehlt fuer unseren Workshop, in der
-      // Hoffnung, dass das damit konfigurierte Verhalten nicht allzu verwirrend ist.
+      // ATTENTION!:
+      // These are default settings that apply to ALL queries.
+      // (These settings can be overwritten in any query)
+      // I have chosen these settings for our workshop, hoping that the behavior configured
+      // this way will not be too confusing.
       //
-      // In eurer Anwendung muesst ihr pruefen, ob die fuer euch (fachlich)
-      // Sinn machen.
+      // In your application, you must check whether they make sense (from a business perspective) for you.
+
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,

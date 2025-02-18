@@ -4,8 +4,8 @@ import PostListPage from "./PostListPage.tsx";
 export default function App() {
   return (
     <>
-      <PostListPage />
       <PostEditorPage />
+      <PostListPage />
       {/*<PostEditorPage />*/}
     </>
   );
