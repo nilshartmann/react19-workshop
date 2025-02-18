@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import TagChooser from "./TagChooser.tsx";
 import PostPreview from "./PostPreview.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import ky from "ky";
+import ky, { HTTPError } from "ky";
 
 /*
 - todo:
@@ -65,17 +65,10 @@ export default function PostEditor() {
       // ky, axios or fetch
 
       return ky
-        .post("http://localhost:7100/posts?slow=2500", {
-          // headers: {
-          //   "Authorization": "...."
-          // }
+        .post("http://localhost:7100/posts", {
           json: { title, body, tags: selectedTags }
         })
         .json();
-    },
-    onError(err) {
-      // monitoringService.handleError(err);
-      console.error("ERROR WHILE DATA MUTATING", err);
     },
     onSuccess(t) {
       console.log("RESPONSE FROM SERVER", t);
@@ -92,7 +85,6 @@ export default function PostEditor() {
   // useDebounce
 
   // console.log("title", title);
-  console.log("RENDER");
 
   // const x = `Hello, ${title}` // JS Template String
   function handleClear() {
@@ -110,11 +102,14 @@ export default function PostEditor() {
 
   const saveDisabled = title === "" || body === "" || savePostMutation.isPending;
 
+  console.log("ERROR", savePostMutation.error);
+
   // const myAvailableTags = [...AVAILABLE_TAGS, title, body];
 
   //
   // JSX => JavaScript XML or XML in JavaScript
   // Virtual DOM  renders to a target platform (mainly the browser)
+  // @ts-ignore
   return (
     <div>
       <h1>Create Post</h1>
@@ -146,7 +141,7 @@ export default function PostEditor() {
       </button>
 
       {savePostMutation.isSuccess && <p>You blog post has been saved</p>}
-      {savePostMutation.isError && <p>You blog post could not be saved</p>}
+      {savePostMutation.isError && <p>You blog post could not be saved!</p>}
 
       {/*<PostPreview body={body} onClear={handleClear} title={title} />*/}
     </div>

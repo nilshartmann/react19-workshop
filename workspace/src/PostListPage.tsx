@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import ky from "ky";
-import { BlogPost } from "./types.ts";
+import { BlogPost, GetBlogPostsResponse } from "./types.ts";
 import PostList from "./PostList.tsx";
 import { useState } from "react";
 
@@ -21,14 +21,18 @@ export default function PostListPage() {
       if (sorting) {
         searchParams.set("orderBy", "likes");
       }
+      searchParams.set("fail", "true")
 
-      return ky
-        .get<BlogPost[]>(`http://localhost:7100/posts?${searchParams.toString()}`, {
-          // headers: {
-          //   "content-type": "application/json"
-          // }
+      const response = await ky
+        .get(`http://localhost:7100/posts?${searchParams.toString()}`, {
         })
         .json();
+      return GetBlogPostsResponse.parse(response);
+
+      // return ky
+      //   .get(`http://localhost:7100/posts?${searchParams.toString()}`, {
+      //   })
+      //   .json().then(response => GetBlogPostsResponse.parse(response));
     }
   });
 
@@ -37,6 +41,7 @@ export default function PostListPage() {
   }
 
   if (result.isError) {
+    console.log(result.error);
     return <h1>ERROR!</h1>;
   }
 
