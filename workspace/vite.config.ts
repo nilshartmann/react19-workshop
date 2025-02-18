@@ -2,7 +2,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-const enableCompiler = false;
+const enableCompiler = true;
 
 const babelConfig = enableCompiler
   ? { babel: { plugins: ["babel-plugin-react-compiler", {}] } }

@@ -1,4 +1,5 @@
 import { logRender, useLogRenderDone } from "./log-render.ts";
+import { memo } from "react";
 
 type PostPreviewProps = {
   title: string;
@@ -26,25 +27,30 @@ export default function PostPreview({ title, body, onClear }: PostPreviewProps) 
 //   - you will also NEVER do things like 'logRender' oder 'useLogRenderDone' in your
 //     application. There are better ways, this is just for simplifaction here
 
+// const Label = memo(function Label({ label }: { label: string }) {
+//   logRender("Label " + label);
+//   return <label>LABEL :{label}</label>;
+// });
+
 function Label({ label }: { label: string }) {
-  logRender("Label");
-  return <label>{label}</label>;
+  logRender("Label " + label);
+  return <label>LABEL :{label}</label>;
 }
 
 function Body({ body }: { body: string }) {
   logRender("Body");
-  return <div>{body}</div>;
+  return <div>BODY: {body}</div>;
 }
 function Title({ title }: { title: string }) {
   logRender("Title");
-  return <div>{title}</div>;
+  return <div>TITLE: {title}</div>;
 }
 
-function Button({ label, onClick }: { label: string; onClick: () => void }) {
+const Button = memo(function Button({ label, onClick }: { label: string; onClick: () => void }) {
   logRender("Button");
   return (
     <button onClick={onClick} className={"Button"}>
       {label}
     </button>
   );
-}
+});

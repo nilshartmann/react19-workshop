@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import TagChooser from "./TagChooser.tsx";
+import PostPreview from "./PostPreview.tsx";
 
 /*
 - todo:
@@ -58,6 +59,14 @@ export default function PostEditor() {
     setSelectedTags([]);
   }
 
+  // const emptyArray = []
+
+  function handleSave() {
+    console.log({ title, body, selectedTags });
+  }
+
+  const saveDisabled = title === "" || body === "";
+
   // const myAvailableTags = [...AVAILABLE_TAGS, title, body];
 
   //
@@ -89,6 +98,11 @@ export default function PostEditor() {
       />
 
       <button onClick={handleClear}>Clear</button>
+      <button onClick={handleSave} disabled={saveDisabled}>
+        Save
+      </button>
+
+      <PostPreview body={body} onClear={handleClear} title={title} />
     </div>
   );
 }

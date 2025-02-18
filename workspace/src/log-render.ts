@@ -29,6 +29,6 @@ export function useLogRenderDone() {
       "total renderings since last render cycle",
       diff
     );
-    counter = {};
+    // counter = {};
   });
 }
