@@ -21,6 +21,22 @@ const HELLO_WORLD = "JO!";
 const AVAILABLE_TAGS = ["JavaScript", "TypeScript", "React"];
 // const thisWillNotWork = useState("Hello World");
 
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error#custom_error_types
+class ResponseError extends Error {
+  errorDetails: any;
+
+  constructor(errorBody: any) {
+    super("Server Request failed");
+
+    this.name = "ResponseError";
+    this.errorDetails = errorBody;
+  }
+}
+
+function isSaveError(err: any): err is ResponseError {
+  return err instanceof ResponseError;
+}
+
 //ECMAScript Module System (ESM)
 // DEFAULT export
 
@@ -64,15 +80,43 @@ export default function PostEditor() {
     async mutationFn() {
       // ky, axios or fetch
 
-      return ky
-        .post("http://localhost:7100/posts", {
-          json: { title, body, tags: selectedTags }
-        })
-        .json();
+      try {
+        return await ky
+          .post(`http://localhost:7100/posts`, {
+            json: { title, body, tags: selectedTags }
+          })
+          .json();
+      } catch (err) {
+        console.log("Saving failed! Caught err from ky.post:", String(err));
+        if (!(err instanceof HTTPError)) {
+          // should not happen with ky, as ky _always_ throws
+          // a HTTPError
+          //
+          // but when using axios or fetch you need other ways to get
+          // the body with error message
+          throw err;
+        }
+
+        // note: it could happen that there an error
+        //  happens, while reading the response
+        //  (for example while body is not valid JSON format)
+        //  you could also handle that here with another
+        //  try...catch
+        const errorBody = await err.response.json();
+
+        // Error response in my backend is { "error": "message from server" },
+        //   and using ResponseError the 'error' is available in the render
+        //   phase in your component
+        //
+        // Depending on your needs, you could also use the complete
+        // body as error. That would make sense when the server
+        // returns more details for the error (for example
+        // field-specific error messages)
+
+        throw new ResponseError(errorBody.error);
+      }
     },
-    onSuccess(t) {
-      console.log("RESPONSE FROM SERVER", t);
-      // getCache().putItem(queryKey, t)
+    onSuccess() {
       queryClient.invalidateQueries({
         queryKey: ["posts"]
       });
@@ -97,12 +141,18 @@ export default function PostEditor() {
 
   function handleSave() {
     console.log({ title, body, selectedTags });
-    savePostMutation.mutateAsync().then(() => handleClear());
+    savePostMutation
+      .mutateAsync()
+      .then(() => handleClear())
+      .catch(() => {
+        // noop: avoid "Uncaught (in promise) HTTPError" error message on console
+        //  In our component, we show the error while rendering the component,
+        //  so we don't need it here.
+        //  But without the catch() the browser would log an error to the console.
+      });
   }
 
   const saveDisabled = title === "" || body === "" || savePostMutation.isPending;
-
-  console.log("ERROR", savePostMutation.error);
 
   // const myAvailableTags = [...AVAILABLE_TAGS, title, body];
 
@@ -141,7 +191,9 @@ export default function PostEditor() {
       </button>
 
       {savePostMutation.isSuccess && <p>You blog post has been saved</p>}
-      {savePostMutation.isError && <p>You blog post could not be saved!</p>}
+      {savePostMutation.isError && isSaveError(savePostMutation.error) && (
+        <p>You blog post could not be saved: {savePostMutation.error.errorDetails}</p>
+      )}
 
       {/*<PostPreview body={body} onClear={handleClear} title={title} />*/}
     </div>
