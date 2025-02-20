@@ -21,11 +21,10 @@ export default function PostListPage() {
       if (sorting) {
         searchParams.set("orderBy", "likes");
       }
-      searchParams.set("fail", "true")
+      // searchParams.set("fail", "true")
 
       const response = await ky
-        .get(`http://localhost:7100/posts?${searchParams.toString()}`, {
-        })
+        .get(`http://localhost:7100/posts?${searchParams.toString()}`)
         .json();
       return GetBlogPostsResponse.parse(response);
 
