@@ -1,7 +1,9 @@
 const jwt = require("jsonwebtoken");
 const express = require("express");
+const fileUpload = require('express-fileupload');
 const bodyParser = require("body-parser");
-
+const fs = require('fs');
+const path = require('path');
 const datastore = require("./datastore");
 
 const app = express();
@@ -42,6 +44,38 @@ app.use((req, _res, next) => {
     next();
   }
 });
+
+app.use(fileUpload({
+//  fileUpload: {
+//    slowEnabled: true
+//  }
+}));
+
+app.post('/upload', async (req, res) => {
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).send('No files were uploaded.');
+  }
+
+  const sampleFile = req.files.file;
+  const uploadFolder = path.join(__dirname, "uploads");
+  if (!fs.existsSync(uploadFolder)) {
+    console.log("Creating upload folder ", uploadFolder);
+    fs.mkdirSync(uploadFolder)
+  }
+
+  const uploadPath = path.join(uploadFolder, sampleFile.name);
+  console.log("Storing file at", uploadPath);
+
+  sampleFile.mv(uploadPath, function(err) {
+    if (err) {
+      console.error("FAILED", err);
+      return res.status(500).send(err);
+    }
+
+    res.send(`File uploaded: ${sampleFile.name}`);
+  });
+});
+
 
 if (authEnabled) {
   app.use((req, _res, next) => {
