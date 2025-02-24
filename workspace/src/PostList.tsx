@@ -1,5 +1,6 @@
 import { BlogPost } from "./types";
 import { formatDate } from "./date-formatter.ts";
+import { Link } from "react-router-dom";
 
 type PostListProps = {
   posts: BlogPost[];
@@ -10,7 +11,9 @@ export default function PostList({ posts }: PostListProps) {
       {posts.map(p => (
         <article key={p.id} className="Container">
           <p className="Date">{formatDate(p.date)}</p>
-          <h1>{p.title}</h1>
+          <Link to={`/posts/${p.id}`}>
+            <h1>{p.title}</h1>
+          </Link>
           {/*<p>{p.body}</p>*/}
           {/*<div className="Tags">*/}
           {/*  {p.tags?.map(tag => (*/}
