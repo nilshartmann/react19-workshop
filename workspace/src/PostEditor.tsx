@@ -42,7 +42,29 @@ function isSaveError(err: any): err is ResponseError {
 
 // "Hello World" | setTitle
 // "AB" | setBody
-export default function PostEditor() {
+type PostEditorProps = {
+  onSave(title: string, body: string): void;
+};
+
+// use-hello-world.ts(x)
+export function useHelloWorld(initialValue: string) {
+  const [helloWorld, setHelloWorld] = useState(initialValue);
+  // const authToken = useContext(AuthTokenContext);
+
+  const logAndSetHelloWorld = (value: string) => {
+    console.log("New Value", value);
+    setHelloWorld(value);
+  };
+
+  return {
+    currentHelloWorld: helloWorld,
+    changeHelloWorld: logAndSetHelloWorld
+  };
+}
+
+export default function PostEditor(/* onSave */) {
+  const helloWorldState = useHelloWorld("Hello World State");
+  const helloWorldState_2 = useHelloWorld("Hello World State 2");
   // Model in React: State
 
   // function myUseState() {
