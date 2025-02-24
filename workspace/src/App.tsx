@@ -6,10 +6,10 @@ import PostEditorZod from "./PostEditorZod.tsx";
 export default function App() {
   return (
     <>
-      {/*<PostEditorZod />*/}
+      <PostEditorZod />
       {/*<FileUpload />*/}
       {/*<PostEditorPage />*/}
-      <PostListPage />
+      {/*<PostListPage />*/}
     </>
   );
 }

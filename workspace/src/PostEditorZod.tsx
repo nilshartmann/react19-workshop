@@ -13,7 +13,10 @@ const PostEditorFormSchema = z.object({
 
 type IPostEditorFormSchema = z.infer<typeof PostEditorFormSchema>;
 
-export default function PostEditorZod() {
+type PostEditorZodProps = {
+  onSave(title: string, body: string): void;
+};
+export default function PostEditorZod({ onSave }: PostEditorZodProps) {
   // todo: remove state and replace with react-hook-form
 
   const form = useForm<IPostEditorFormSchema>({
@@ -32,18 +35,18 @@ export default function PostEditorZod() {
     console.log("todo: implement onClear using react-hook-form");
   };
 
-  const onSave = (data: IPostEditorFormSchema) => {
-    console.log("DATA FROM FORM", data);
+  const handleSave = (data: IPostEditorFormSchema) => {
+    // console.log("DATA FROM FORM", data);
+    onSave(data.title, data.body);
     // console.log("onSave", { title, body });
   };
 
   form.watch("title");
 
   const currentTitleValue = form.getValues("title");
-  console.log("Rendering PostEditor", currentTitleValue);
 
   return (
-    <form onSubmit={form.handleSubmit(onSave)}>
+    <form onSubmit={form.handleSubmit(handleSave)}>
       <h1>Create Post</h1>
 
       <label>
